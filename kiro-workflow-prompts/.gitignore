@@ -1,0 +1,30 @@
+# Temporary files and directories
+.tmp*/
+*.tmp
+temp/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Coverage reports and build artifacts
+coverage/
+dist/
+build/
+node_modules/
