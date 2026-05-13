@@ -1,98 +1,98 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
+import { Text, View } from 'react-native';
+
+import { AppScreen } from '@/components/app-screen';
+import { ArticleListItem } from '@/components/article-list-item';
+import { CategoryCard } from '@/components/category-card';
+import { FeaturedCard } from '@/components/featured-card';
+import { SectionHeader } from '@/components/section-header';
+import { StateView } from '@/components/state-view';
+import { AppColors, Fonts } from '@/constants/theme';
+import { useArticles } from '@/hooks/use-articles';
+import { useCategories } from '@/hooks/use-categories';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const categories = useCategories();
+  const articles = useArticles({ page: 1, pageSize: 5 });
+  const featured = articles.data[0];
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <AppScreen>
+      <View style={{ gap: 10 }}>
+        <Text style={{ color: AppColors.primary, fontSize: 12, fontWeight: '800', textTransform: 'uppercase' }}>
+          Minha Saúde Feminina
+        </Text>
+        <Text
+          selectable
+          style={{
+            color: AppColors.text,
+            fontFamily: Fonts.serif,
+            fontSize: 34,
+            lineHeight: 40,
+          }}>
+          Informação confiável para você se cuidar.
+        </Text>
+        <Text selectable style={{ color: AppColors.mutedText, fontSize: 16, lineHeight: 24 }}>
+          Conteúdo de saúde da mulher em linguagem clara, organizado por fases da vida e temas de cuidado.
+        </Text>
+      </View>
+
+      {articles.status === 'loading' && !featured ? (
+        <StateView loading title="Carregando destaque..." />
+      ) : featured ? (
+        <FeaturedCard title={featured.title} summary={featured.summary} href={`/artigo/${featured.id}`} />
+      ) : (
+        <FeaturedCard
+          title="Explore os temas de cuidado"
+          summary="Os artigos aparecerão aqui assim que estiverem disponíveis na API."
+        />
+      )}
+
+      <View style={{ gap: 12 }}>
+        <SectionHeader
+          title="Categorias"
+          action={
+            <Link href="/categorias">
+              <Text style={{ color: AppColors.primary, fontWeight: '800' }}>Ver todas</Text>
+            </Link>
+          }
+        />
+        {categories.status === 'loading' ? (
+          <StateView loading title="Carregando categorias..." />
+        ) : categories.status === 'error' ? (
+          <StateView title="Não foi possível carregar categorias" message={categories.message} actionLabel="Tentar novamente" onAction={() => void categories.retry()} />
+        ) : categories.status === 'empty' ? (
+          <StateView title="Nenhuma categoria encontrada" message="A API ainda não retornou categorias para exibição." />
+        ) : (
+          <View style={{ gap: 12 }}>
+            {categories.data.slice(0, 4).map((category) => (
+              <CategoryCard key={category.id} category={category} href={`/categoria/${category.slug || category.id}`} />
+            ))}
+          </View>
+        )}
+      </View>
+
+      <View style={{ gap: 12 }}>
+        <SectionHeader title="Últimos conteúdos" />
+        {articles.status === 'loading' && articles.data.length === 0 ? (
+          <StateView loading title="Carregando artigos..." />
+        ) : articles.status === 'error' ? (
+          <StateView title="Não foi possível carregar artigos" message={articles.message} actionLabel="Tentar novamente" onAction={() => void articles.retry()} />
+        ) : articles.status === 'empty' ? (
+          <StateView title="Nenhum artigo publicado" message="Quando novos conteúdos estiverem disponíveis, eles aparecerão nesta lista." />
+        ) : (
+          <View style={{ gap: 10 }}>
+            {articles.data.map((article) => (
+              <ArticleListItem
+                key={article.id}
+                article={article}
+                category={categories.data.find((category) => category.id === article.categoryId)}
+                href={`/artigo/${article.id}`}
+              />
+            ))}
+          </View>
+        )}
+      </View>
+    </AppScreen>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
