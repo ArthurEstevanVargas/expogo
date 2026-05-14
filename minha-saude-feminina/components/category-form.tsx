@@ -9,11 +9,14 @@ type FieldErrors = Partial<Record<keyof CreateCategoryRequest, string>>;
 function validate(values: CreateCategoryRequest): FieldErrors {
   const errors: FieldErrors = {};
 
+  // Valida se o nome foi preenchido corretamente
   if (!values.name.trim()) errors.name = 'Informe o nome.';
   if (!values.slug.trim()) errors.slug = 'Informe o slug.';
   if (values.slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(values.slug)) {
     errors.slug = 'Use letras minusculas, numeros e hifens.';
   }
+
+  // Verifica se a descrição foi informada
   if (!values.description.trim()) errors.description = 'Informe a descricao.';
   if (values.displayOrder !== undefined && (!Number.isInteger(values.displayOrder) || values.displayOrder < 1)) {
     errors.displayOrder = 'Use um numero inteiro positivo.';
@@ -94,6 +97,7 @@ export function CategoryForm({
   }, [initialValue?.name, initialValue?.slug, initialValue?.description, initialValue?.displayOrder]);
 
   async function handleSubmit() {
+    // Monta o objeto com os dados tratados antes do envio
     const payload: CreateCategoryRequest = {
       name: name.trim(),
       slug: slug.trim(),
