@@ -13,6 +13,7 @@ export function FeaturedCard({
   summary: string;
   href?: Href;
 }) {
+   // Estrutura principal reutilizável do card em destaque
   const content = (
     <View
       style={{
@@ -24,6 +25,8 @@ export function FeaturedCard({
       <Text style={{ color: AppColors.primaryForeground, fontSize: 12, fontWeight: '800', textTransform: 'uppercase' }}>
         Destaque
       </Text>
+
+       {/* Exibe o título principal com fonte serifada para maior destaque visual */}
       <Text
         selectable
         style={{
@@ -37,6 +40,8 @@ export function FeaturedCard({
       <Text selectable style={{ color: AppColors.primaryForeground, fontSize: 15, lineHeight: 22, opacity: 0.9 }}>
         {summary}
       </Text>
+
+      {/* Renderiza indicador de navegação apenas quando existir um link */}
       {href ? (
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text style={{ color: AppColors.primaryForeground, fontSize: 15, fontWeight: '700' }}>
