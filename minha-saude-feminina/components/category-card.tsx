@@ -22,6 +22,7 @@ export function getCategoryAccent(category: Category) {
     backgroundColor: accentBackgrounds[index],
   };
 }
+//Cartão de Categoria
 
 export function CategoryCard({ category, href }: { category: Category; href: Href }) {
   const accent = getCategoryAccent(category);
