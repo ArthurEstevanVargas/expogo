@@ -6,8 +6,8 @@ import { AppColors } from '@/constants/theme';
 export type AppScreenProps = {
   children: ReactNode;
   contentContainerStyle?: StyleProp<ViewStyle>;
-};
-
+}; 
+// Tela Principal
 export function AppScreen({ children, contentContainerStyle }: AppScreenProps) {
   return (
     <ScrollView
