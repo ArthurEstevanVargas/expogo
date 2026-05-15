@@ -6,7 +6,7 @@ Minha Saude Feminina e um aplicativo mobile/web feito com Expo e Expo Router par
 
 O objetivo do projeto e facilitar o acesso a informacoes de saude feminina em linguagem clara, organizada por temas de cuidado e fases da vida. A aplicacao funciona como uma vitrine de conteudos confiaveis, com busca, navegacao por categorias e leitura completa de artigos com fontes quando fornecidas pela API.
 
-Este projeto tambem inclui uma area administrativa simples para gerenciar categorias. Essa area usa chave de API e deve ser tratada como recurso interno ou temporario enquanto nao houver uma camada server-side dedicada para proteger credenciais em producao.
+Este projeto tambem inclui uma area administrativa simples para gerenciar categorias. Essa area usa chave de API e deve ser tratada como recurso interno ou temporario enquanto nao houver uma camada server-side dedicada para proteger credenciais em produção.
 
 ## O que o app faz hoje
 
