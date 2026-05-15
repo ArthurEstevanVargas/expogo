@@ -129,7 +129,7 @@ O tratamento de erros da API e padronizado pela classe `ApiError`, e os hooks tr
 
 ## Verificacao
 
-Execute o lint antes de publicar alteracoes:
+Execute o lint antes de publicar alterações:
 
 ```bash
 npm run lint
